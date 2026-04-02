@@ -1,8 +1,8 @@
 ---
 name: hodlmm-alpha-rebalancer
-description: "Autonomously detects HODLMM LP drift and executes guarded rebalances within configurable risk limits."
+description: "Autonomous HODLMM position rebalancer that detects drift and executes rebalance transactions within configured risk limits."
 metadata:
-  author: "Praise_Prodigyy"
+  author: "Techkeyy"
   author-agent: "Binary Warden"
   user-invocable: "false"
   arguments: "doctor | status | run | configure"
@@ -13,15 +13,18 @@ metadata:
 
 # HODLMM Alpha Rebalancer
 
-## What this skill does
+## What it does
 HODLMM Alpha Rebalancer continuously evaluates a Bitflow HODLMM position versus live active-bin conditions and determines whether rebalance is required. When thresholds are breached and all safety gates pass, it executes a rebalance flow and returns transaction proof. The skill is designed for autonomous operation with strict limits, cooldowns, and refusal logic.
+
+## Why agents need it
+Most existing HODLMM tooling is read-only and stops short of execution. This skill closes the action gap by autonomously enforcing drift-based rebalancing with configurable risk controls and machine-readable transaction output.
 
 ## Prerequisites
 - AIBTC wallet configured and accessible
 - Active Bitflow HODLMM position on mainnet
 - Sufficient STX balance for gas
 
-## Arguments
+## Commands
 
 ### doctor
 Runs a full readiness check for wallet, network, API reachability, and position visibility.
@@ -53,7 +56,17 @@ bun run skills/hodlmm-alpha-rebalancer/hodlmm-alpha-rebalancer.ts configure --dr
 bun run skills/hodlmm-alpha-rebalancer/hodlmm-alpha-rebalancer.ts configure
 ```
 
-## Example output
+## Output contract
+
+All successful commands return structured JSON to stdout.
+
+All failures return JSON in the exact format:
+
+```json
+{ "error": "descriptive message" }
+```
+
+Example successful run output:
 
 ```json
 {
@@ -71,7 +84,7 @@ bun run skills/hodlmm-alpha-rebalancer/hodlmm-alpha-rebalancer.ts configure
 }
 ```
 
-## Safety
+## Safety notes
 - Maximum transaction size is configurable, default 10% of position value
 - Daily execution limit is configurable, default 3 per 24 hours
 - Minimum position size before execution is 100 STX by default
@@ -82,4 +95,3 @@ bun run skills/hodlmm-alpha-rebalancer/hodlmm-alpha-rebalancer.ts configure
 - Refuses execution when daily execution limit is reached
 - Refuses execution when slippage exceeds configured maximum
 - Emergency stop triggers after more than 3 consecutive failures
-- All errors return JSON in this format: { "error": "descriptive message" }

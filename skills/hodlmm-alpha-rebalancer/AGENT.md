@@ -1,7 +1,7 @@
 ---
 name: hodlmm-alpha-rebalancer-agent
 skill: hodlmm-alpha-rebalancer
-description: "Autonomous HODLMM position manager that rebalances drifted LP ranges within configured risk limits."
+description: "Autonomous HODLMM position manager that detects drift and executes rebalance within configured risk limits."
 ---
 
 # Agent Behavior - HODLMM Alpha Rebalancer
